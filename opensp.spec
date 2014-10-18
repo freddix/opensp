@@ -1,7 +1,8 @@
+# based on PLD Linux spec git://git.pld-linux.org/packages/.git
 Summary:	OpenSP - SGML parser
 Name:		opensp
 Version:	1.5.2
-Release:	13
+Release:	16
 Epoch:		2
 License:	Free (Copyright (C) 1999 The OpenJade group)
 Group:		Applications/Publishing/SGML
@@ -30,6 +31,7 @@ SGML and XML documents.
 Summary:	OpenSP header files
 Group:		Development/Libraries
 Requires:	%{name} = %{epoch}:%{version}
+Requires:	libstdc++-devel
 
 %description devel
 OpenSP header files and devel documentation.
@@ -50,7 +52,8 @@ OpenSP header files and devel documentation.
 	--disable-static					\
 	--enable-default-catalog=%{_sysconfdir}/sgml/catalog	\
 	--enable-default-search-path=%{sgmldir}			\
-	--enable-http
+	--enable-http						\
+	--enable-xml-messages
 %{__make}
 
 %install
@@ -60,6 +63,8 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT \
 	localedir=%{_prefix}/share/locale \
 	pkgdocdir=%{_docdir}/%{name}-%{version}
+
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
 
 for i in nsgmls sgmlnorm spam spcat spent; do
 	ln -sf o$i $RPM_BUILD_ROOT%{_bindir}/$i
@@ -88,5 +93,4 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_includedir}/OpenSP
 %attr(755,root,root) %{_libdir}/lib*.so
-%{_libdir}/lib*.la
 
